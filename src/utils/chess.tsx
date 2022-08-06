@@ -1,9 +1,10 @@
 import {
 	color,
-	EFigureName,
 	EShortColor,
 	EShortFigureName,
-	ICell
+	ICell,
+	EFigure,
+	figure
 } from "types/types";
 
 const EMPTY_CELL = "..";
@@ -44,17 +45,18 @@ export default class Chess {
 				id: `cell_${x}_${y}`,
 				x,
 				y,
+				figure: null,
+				color: null,
 				isSelected: false,
 				isUnderAtack: false,
 				canMove: false
 			} as ICell;
 
 			if (str !== EMPTY_CELL) {
-				const [color, figureName] = str.split("");
+				const [color, figure] = str.split("");
 
-				cell.figureName =
-					EShortFigureName[figureName as keyof typeof EShortFigureName];
-				cell.figureColor = EShortColor[color as keyof typeof EShortColor];
+				cell.figure = EShortFigureName[figure as keyof typeof EShortFigureName];
+				cell.color = EShortColor[color as keyof typeof EShortColor];
 			}
 
 			board.push(cell);
@@ -63,15 +65,41 @@ export default class Chess {
 		return board;
 	}
 
-	public setPossibleMoves(cell: ICell) {
-		this._clearBoard();
-		this._selectCell(cell.x, cell.y);
+	public move(toX: number, toY: number): [figure | null, color | null] {
+		const toCell = this._getCell(toX, toY);
+		const selectedCell = this._getSelectedCell();
+		if (!toCell || !selectedCell || !(toCell?.isUnderAtack || toCell?.canMove))
+			return [null, null];
 
-		switch (cell.figureName) {
-			case EFigureName.knight:
+		const { figure, color } = toCell;
+		this._eatFigure(selectedCell, toCell);
+		this._clearBoard();
+		this._changePlayer();
+		return [figure, color];
+	}
+
+	public select(x: number, y: number) {
+		let cell = this._getCell(x, y);
+		if (!cell) return;
+
+		this._clearBoard();
+		cell.isSelected = true;
+		switch (cell?.figure) {
+			case EFigure.knight:
 				this._setKnightPossibleMoves(cell);
 				break;
 		}
+	}
+
+	private _eatFigure(cell: ICell, toCell: ICell) {
+		toCell.figure = cell?.figure;
+		toCell.color = cell?.color;
+		cell.figure = null;
+		cell.color = null;
+	}
+
+	private _changePlayer() {
+		this.player = this.player === "white" ? "black" : "white";
 	}
 
 	private _clearBoard() {
@@ -82,9 +110,8 @@ export default class Chess {
 		});
 	}
 
-	private _selectCell(x: number, y: number) {
-		let cell = this._getCell(x, y);
-		cell && (cell.isSelected = true);
+	private _getSelectedCell() {
+		return this.board.find((cell) => cell.isSelected);
 	}
 
 	private _getCell(x: number, y: number) {
@@ -95,8 +122,8 @@ export default class Chess {
 		let cell = this._getCell(x, y);
 		if (!cell) return;
 
-		if (cell.figureName) {
-			if (cell?.figureColor !== color) {
+		if (cell.figure) {
+			if (cell?.color !== color) {
 				cell.isUnderAtack = true;
 			}
 		} else {
@@ -104,7 +131,7 @@ export default class Chess {
 		}
 	}
 
-	private _setKnightPossibleMoves({ x, y, figureColor }: ICell) {
+	private _setKnightPossibleMoves({ x, y, color }: ICell) {
 		let cellArrays = [
 			[x - 1, y + 2],
 			[x + 1, y + 2],
@@ -118,7 +145,7 @@ export default class Chess {
 
 		cellArrays.forEach((cellArr) => {
 			const [posX, posY] = cellArr;
-			figureColor && this._updateCell(posX, posY, figureColor);
+			color && this._updateCell(posX, posY, color);
 		});
 	}
 }

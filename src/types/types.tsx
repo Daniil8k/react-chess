@@ -1,13 +1,7 @@
 export type color = "white" | "black";
-export type figureName =
-	| "rook"
-	| "knight"
-	| "bishop"
-	| "queen"
-	| "king"
-	| "pawn";
+export type figure = "rook" | "knight" | "bishop" | "queen" | "king" | "pawn";
 
-export enum EFigureName {
+export enum EFigure {
 	rook = "rook",
 	knight = "knight",
 	bishop = "bishop",
@@ -16,26 +10,21 @@ export enum EFigureName {
 	pawn = "pawn"
 }
 
-export interface IPlayer {
-	id: string;
-	color: color;
-	eatenFigures: IFigure[];
-}
-
-export interface IFigure {
-	name: figureName;
-	color: color;
-}
-
 export interface ICell {
 	id: string;
 	x: number;
 	y: number;
-	figureName?: figureName;
-	figureColor?: color;
+	figure: figure | null;
+	color: color | null;
 	isSelected?: boolean;
 	canMove?: boolean;
 	isUnderAtack?: boolean;
+}
+
+export interface IPlayer {
+	id: string;
+	color: color;
+	eatenFigures: figure[];
 }
 
 export enum EShortColor {

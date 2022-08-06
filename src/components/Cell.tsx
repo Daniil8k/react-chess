@@ -8,12 +8,13 @@ interface FigureProps extends ICell {
 }
 
 const Cell: FC<FigureProps> = ({ playerColor, onSelect, ...cell }) => {
-	const { x, y, figureName, figureColor, isSelected, canMove, isUnderAtack } =
-		cell;
-	const isCurrentPlayer = figureName && playerColor === figureColor;
+	const { x, y, figure, color, isSelected, canMove, isUnderAtack } = cell;
+	const isCurrentPlayer = playerColor === color;
 
 	const onClick = () => {
-		isCurrentPlayer && onSelect(cell);
+		if (isCurrentPlayer || canMove || isUnderAtack) {
+			onSelect(cell);
+		}
 	};
 
 	return (
@@ -25,14 +26,17 @@ const Cell: FC<FigureProps> = ({ playerColor, onSelect, ...cell }) => {
 			}}
 			className={[
 				"absolute w-10 h-10 flex items-center justify-center",
-				isCurrentPlayer ? "cursor-pointer" : "cursor-default",
+				isCurrentPlayer || canMove || isUnderAtack
+					? "cursor-pointer"
+					: "cursor-default",
 				isCurrentPlayer ? "hover:bg-accent" : "",
+				canMove ? "hover:bg-green-500" : "",
 				isSelected ? "bg-accent" : "",
 				isUnderAtack ? "bg-red-500" : ""
 			].join(" ")}
 		>
-			{figureColor && figureName ? (
-				<Figure name={figureName} color={figureColor} />
+			{figure && color ? (
+				<Figure name={figure} color={color} />
 			) : (
 				canMove && <div className="w-3 h-3 rounded-[50%] bg-green-500"></div>
 			)}

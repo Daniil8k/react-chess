@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { color, figureName } from "types/types";
+import { color, figure } from "types/types";
 
 interface IObjectKeys {
 	[key: string]: string | undefined;
@@ -21,7 +21,7 @@ const FIGURE_IMAGES: IObjectKeys = {
 };
 
 export interface FigureProps {
-	name: figureName;
+	name: figure;
 	color: color;
 }
 

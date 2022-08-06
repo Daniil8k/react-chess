@@ -22,7 +22,12 @@ const Board: FC = () => {
 	});
 
 	const onTurn = useCallback((cell: ICell) => {
-		chess.setPossibleMoves(cell);
+		if (cell.canMove || cell.isUnderAtack) {
+			const [figure, color] = chess.move(cell.x, cell.y);
+			console.log(figure, color);
+		} else {
+			chess.select(cell.x, cell.y);
+		}
 
 		setState({
 			playerColor: chess.player,
