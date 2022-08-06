@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import Chess from "utils/chess";
 import BoardBackground from "./BoardBackground";
 import { color, ICell } from "types/types";
@@ -21,24 +21,23 @@ const Board: FC = () => {
 		isCheckmate: false
 	});
 
-	const onTurn = () => {
-		chess.setMoves();
+	const onTurn = useCallback((cell: ICell) => {
+		chess.setPossibleMoves(cell);
 
-		setState((state) => ({
+		setState({
 			playerColor: chess.player,
 			board: chess.board,
 			isCheck: chess.isCheck,
 			isCheckmate: chess.isCheckmate
-		}));
-	};
+		});
+	}, []);
 
 	return (
 		<div>
-			<button onClick={onTurn}>{state.playerColor}</button>
 			<div className="relative">
 				{state.board.map((cell) => (
 					<Cell
-						key={`cell_${cell.x}_${cell.y}`}
+						key={cell.id}
 						{...cell}
 						playerColor={state.playerColor}
 						onSelect={onTurn}

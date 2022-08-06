@@ -1,25 +1,19 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import { color, ICell } from "types/types";
 import Figure from "./Figure";
 
 interface FigureProps extends ICell {
 	playerColor: color;
-	onSelect: () => void;
+	onSelect: (cell: ICell) => void;
 }
 
-const Cell: FC<FigureProps> = ({
-	x,
-	y,
-	figureName,
-	figureColor,
-	playerColor,
-	isSelected,
-	onSelect
-}) => {
+const Cell: FC<FigureProps> = ({ playerColor, onSelect, ...cell }) => {
+	const { x, y, figureName, figureColor, isSelected, canMove, isUnderAtack } =
+		cell;
 	const isCurrentPlayer = figureName && playerColor === figureColor;
 
 	const onClick = () => {
-		isCurrentPlayer && onSelect();
+		isCurrentPlayer && onSelect(cell);
 	};
 
 	return (
@@ -33,14 +27,17 @@ const Cell: FC<FigureProps> = ({
 				"absolute w-10 h-10 flex items-center justify-center",
 				isCurrentPlayer ? "cursor-pointer" : "cursor-default",
 				isCurrentPlayer ? "hover:bg-accent" : "",
-				isSelected ? "bg-accent" : ""
+				isSelected ? "bg-accent" : "",
+				isUnderAtack ? "bg-red-500" : ""
 			].join(" ")}
 		>
-			{figureColor && figureName && (
+			{figureColor && figureName ? (
 				<Figure name={figureName} color={figureColor} />
+			) : (
+				canMove && <div className="w-3 h-3 rounded-[50%] bg-green-500"></div>
 			)}
 		</div>
 	);
 };
 
-export default Cell;
+export default React.memo(Cell);

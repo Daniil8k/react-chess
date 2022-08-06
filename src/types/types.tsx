@@ -28,6 +28,7 @@ export interface IFigure {
 }
 
 export interface ICell {
+	id: string;
 	x: number;
 	y: number;
 	figureName?: figureName;

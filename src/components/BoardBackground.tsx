@@ -17,7 +17,7 @@ const Row = ({ y }: { y: number }) => {
 	return (
 		<>
 			{new Array(8).fill(0).map((_, x) => (
-				<Piece x={x} y={y} />
+				<Piece key={`bg_${x}_${y}`} x={x} y={y} />
 			))}
 		</>
 	);

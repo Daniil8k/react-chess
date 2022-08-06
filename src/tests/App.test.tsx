@@ -3,10 +3,6 @@ import App from "App";
 
 test("renders App", () => {
 	render(<App />);
-	const div = screen.getByText(/App/i);
-	expect(div).toBeInTheDocument();
-});
-
-test("sum", () => {
-	expect(4 + 4).toEqual(8);
+	const chess = screen.getByText(/chess/i);
+	expect(chess).toBeInTheDocument();
 });

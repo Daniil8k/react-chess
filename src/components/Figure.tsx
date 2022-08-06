@@ -1,3 +1,4 @@
+import React, { FC } from "react";
 import { color, figureName } from "types/types";
 
 interface IObjectKeys {
@@ -16,7 +17,7 @@ const FIGURE_IMAGES: IObjectKeys = {
 	bishop_black: require(`../assets/bishop_black.svg`).default,
 	queen_black: require(`../assets/queen_black.svg`).default,
 	king_black: require(`../assets/king_black.svg`).default,
-	pawn_black: require(`../assets/pawn_black.svg`).default,
+	pawn_black: require(`../assets/pawn_black.svg`).default
 };
 
 export interface FigureProps {
@@ -24,14 +25,16 @@ export interface FigureProps {
 	color: color;
 }
 
-export default function Figure({ name, color }: FigureProps) {
+const Figure: FC<FigureProps> = ({ name, color }) => {
 	return (
 		<img
 			width={30}
 			height={30}
 			className={"select-none"}
 			src={FIGURE_IMAGES[color === "black" ? name + "_black" : name]}
-			alt={''}
+			alt={""}
 		/>
 	);
-}
+};
+
+export default React.memo(Figure);
