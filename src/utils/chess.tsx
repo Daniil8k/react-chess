@@ -1,4 +1,10 @@
-import { color, EShortColor, EShortFigureName, ICell } from "types/types";
+import {
+	color,
+	EFigureName,
+	EShortColor,
+	EShortFigureName,
+	ICell
+} from "types/types";
 
 const EMPTY_CELL = "..";
 const DEFAULT_BOARD_TEMPLATE = `
@@ -31,9 +37,16 @@ export default class Chess {
 		let templateArr = DEFAULT_BOARD_TEMPLATE.split(/[\s]/).filter((i) => i);
 
 		templateArr.forEach((str, index) => {
+			let x = Math.trunc(index / SIZE);
+			let y = index % SIZE;
+
 			let cell = {
-				x: Math.trunc(index / SIZE),
-				y: index % SIZE
+				id: `cell_${x}_${y}`,
+				x,
+				y,
+				isSelected: false,
+				isUnderAtack: false,
+				canMove: false
 			} as ICell;
 
 			if (str !== EMPTY_CELL) {
@@ -50,19 +63,62 @@ export default class Chess {
 		return board;
 	}
 
-	public setMoves() {
-		if (this.board[3].figureName) {
-			this.board[25].figureName = this.board[3].figureName;
-			this.board[25].figureColor = this.board[3].figureColor;
+	public setPossibleMoves(cell: ICell) {
+		this._clearBoard();
+		this._selectCell(cell.x, cell.y);
 
-			delete this.board[3].figureName;
-			delete this.board[3].figureColor;
-		} else {
-			this.board[3].figureName = this.board[25].figureName;
-			this.board[3].figureColor = this.board[25].figureColor;
-
-			delete this.board[25].figureName;
-			delete this.board[25].figureColor;
+		switch (cell.figureName) {
+			case EFigureName.knight:
+				this._setKnightPossibleMoves(cell);
+				break;
 		}
+	}
+
+	private _clearBoard() {
+		this.board.forEach((cell) => {
+			cell.canMove = false;
+			cell.isUnderAtack = false;
+			cell.isSelected = false;
+		});
+	}
+
+	private _selectCell(x: number, y: number) {
+		let cell = this._getCell(x, y);
+		cell && (cell.isSelected = true);
+	}
+
+	private _getCell(x: number, y: number) {
+		return this.board.find((cell) => cell.x === x && cell.y === y);
+	}
+
+	private _updateCell(x: number, y: number, color: color) {
+		let cell = this._getCell(x, y);
+		if (!cell) return;
+
+		if (cell.figureName) {
+			if (cell?.figureColor !== color) {
+				cell.isUnderAtack = true;
+			}
+		} else {
+			cell.canMove = true;
+		}
+	}
+
+	private _setKnightPossibleMoves({ x, y, figureColor }: ICell) {
+		let cellArrays = [
+			[x - 1, y + 2],
+			[x + 1, y + 2],
+			[x - 1, y - 2],
+			[x + 1, y - 2],
+			[x - 2, y + 1],
+			[x + 2, y + 1],
+			[x - 2, y - 1],
+			[x + 2, y - 1]
+		];
+
+		cellArrays.forEach((cellArr) => {
+			const [posX, posY] = cellArr;
+			figureColor && this._updateCell(posX, posY, figureColor);
+		});
 	}
 }
