@@ -1,18 +1,45 @@
-import { FC, useEffect, useRef, useState } from "react";
-import { ICell } from "types/types";
+import { FC } from "react";
+import { color, ICell } from "types/types";
+import Figure from "./Figure";
 
-interface CellProps extends ICell {}
+interface FigureProps extends ICell {
+	playerColor: color;
+	onSelect: () => void;
+}
 
-const Cell: FC<CellProps> = ({ x, y }) => {
-	const isDark = (x + y) % 2 === 0;
+const Cell: FC<FigureProps> = ({
+	x,
+	y,
+	figureName,
+	figureColor,
+	playerColor,
+	isSelected,
+	onSelect
+}) => {
+	const isCurrentPlayer = figureName && playerColor === figureColor;
+
+	const onClick = () => {
+		isCurrentPlayer && onSelect();
+	};
 
 	return (
 		<div
+			onClick={onClick}
+			style={{
+				top: `${x * 2.5}rem`,
+				left: `${y * 2.5}rem`
+			}}
 			className={[
-				"w-10 h-10 flex items-center justify-center",
-				isDark ? "bg-cell-dark" : "bg-cell"
+				"absolute w-10 h-10 flex items-center justify-center",
+				isCurrentPlayer ? "cursor-pointer" : "cursor-default",
+				isCurrentPlayer ? "hover:bg-accent" : "",
+				isSelected ? "bg-accent" : ""
 			].join(" ")}
-		></div>
+		>
+			{figureColor && figureName && (
+				<Figure name={figureName} color={figureColor} />
+			)}
+		</div>
 	);
 };
 

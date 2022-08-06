@@ -1,11 +1,23 @@
 import React, { FC } from "react";
-import Cell from "components/Cell";
+
+const Piece = ({ x, y }: { x: number; y: number }) => {
+	const isDark = (x + y) % 2 === 0;
+
+	return (
+		<div
+			className={[
+				"w-10 h-10 flex items-center justify-center",
+				isDark ? "bg-cell-dark" : "bg-cell"
+			].join(" ")}
+		></div>
+	);
+};
 
 const Row = ({ y }: { y: number }) => {
 	return (
 		<>
 			{new Array(8).fill(0).map((_, x) => (
-				<Cell key={`cell_${x}_${y}`} x={x} y={y} />
+				<Piece x={x} y={y} />
 			))}
 		</>
 	);

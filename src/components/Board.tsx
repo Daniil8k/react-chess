@@ -1,13 +1,21 @@
 import { FC, useState } from "react";
 import Chess from "utils/chess";
-import Figure from "components/Figure";
 import BoardBackground from "./BoardBackground";
+import { color, ICell } from "types/types";
+import Cell from "./Cell";
 
 const chess = new Chess();
 
+interface IState {
+	playerColor: color;
+	board: ICell[];
+	isCheck: boolean;
+	isCheckmate: boolean;
+}
+
 const Board: FC = () => {
-	const [state, setState] = useState({
-		player: "w",
+	const [state, setState] = useState<IState>({
+		playerColor: "white",
 		board: chess.board,
 		isCheck: false,
 		isCheckmate: false
@@ -17,7 +25,7 @@ const Board: FC = () => {
 		chess.setMoves();
 
 		setState((state) => ({
-			player: chess.player,
+			playerColor: chess.player,
 			board: chess.board,
 			isCheck: chess.isCheck,
 			isCheckmate: chess.isCheckmate
@@ -26,10 +34,15 @@ const Board: FC = () => {
 
 	return (
 		<div>
-			<button onClick={onTurn}>test</button>
+			<button onClick={onTurn}>{state.playerColor}</button>
 			<div className="relative">
 				{state.board.map((cell) => (
-					<Figure key={`cell_${cell.x}_${cell.y}`} {...cell} />
+					<Cell
+						key={`cell_${cell.x}_${cell.y}`}
+						{...cell}
+						playerColor={state.playerColor}
+						onSelect={onTurn}
+					/>
 				))}
 				<BoardBackground />
 			</div>

@@ -32,6 +32,7 @@ export interface ICell {
 	y: number;
 	figureName?: figureName;
 	figureColor?: color;
+	isSelected?: boolean;
 	canMove?: boolean;
 	isUnderAtack?: boolean;
 }
