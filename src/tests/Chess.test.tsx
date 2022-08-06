@@ -15,21 +15,21 @@ const _getCell = (board: ICell[], x: number, y: number) => {
 };
 
 it("Select Knight", () => {
-	let cell_0_6 = _getCell(initialBoard, 0, 6);
-	let cell_2_5 = _getCell(initialBoard, 2, 5);
-	let cell_2_7 = _getCell(initialBoard, 2, 7);
+	let cell_0_6 = _getCell(initialBoard, 6, 0);
+	let cell_2_5 = _getCell(initialBoard, 5, 2);
+	let cell_2_7 = _getCell(initialBoard, 7, 2);
 
 	cell_0_6.isSelected = true;
 	cell_2_5.canMove = true;
 	cell_2_7.canMove = true;
 
-	chess.select(0, 6);
+	chess.select(6, 0);
 	expect(chess.board).toEqual(initialBoard);
 });
 
 it("Move knight", () => {
-	let cell_0_6 = _getCell(initialBoard, 0, 6);
-	let cell_2_7 = _getCell(initialBoard, 2, 7);
+	let cell_0_6 = _getCell(initialBoard, 6, 0);
+	let cell_2_7 = _getCell(initialBoard, 7, 2);
 
 	cell_2_7.figure = cell_0_6?.figure;
 	cell_2_7.color = cell_0_6?.color;
@@ -37,7 +37,7 @@ it("Move knight", () => {
 	cell_0_6.color = null;
 	cell_0_6.isSelected = false;
 
-	chess.select(0, 6);
-	chess.move(2, 7);
+	chess.select(6, 0);
+	chess.move(7, 2);
 	expect(chess.board).toEqual(initialBoard);
 });
