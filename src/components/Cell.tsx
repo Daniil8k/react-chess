@@ -21,8 +21,8 @@ const Cell: FC<FigureProps> = ({ playerColor, onSelect, ...cell }) => {
 		<div
 			onClick={onClick}
 			style={{
-				top: `${x * 2.5}rem`,
-				left: `${y * 2.5}rem`
+				top: `${y * 2.5}rem`,
+				left: `${x * 2.5}rem`
 			}}
 			className={[
 				"absolute w-10 h-10 flex items-center justify-center",
