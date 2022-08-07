@@ -56,3 +56,7 @@ it("Pawn first move", () => {
 	chess.move(6, 3);
 	expect(chess.board).toEqual(initialBoard);
 });
+
+it("Rook move", () => {
+	chess.select(0, 3);
+});

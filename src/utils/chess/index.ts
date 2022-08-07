@@ -6,7 +6,13 @@ import {
 	EFigure,
 	figure
 } from "types/types";
-import { selectKnight, selectPawn } from "./select";
+import {
+	selectBishop,
+	selectKnight,
+	selectPawn,
+	selectQueen,
+	selectRook
+} from "./select";
 
 const EMPTY_CELL = "..";
 const DEFAULT_BOARD_TEMPLATE = `
@@ -90,6 +96,15 @@ export default class Chess {
 				break;
 			case EFigure.pawn:
 				selectPawn.call(this, cell);
+				break;
+			case EFigure.rook:
+				selectRook.call(this, cell);
+				break;
+			case EFigure.bishop:
+				selectBishop.call(this, cell);
+				break;
+			case EFigure.queen:
+				selectQueen.call(this, cell);
 				break;
 		}
 	}

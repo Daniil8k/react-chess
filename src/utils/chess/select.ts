@@ -61,4 +61,66 @@ function selectPawn(this: Chess, { x, y, color }: ICell) {
 	});
 }
 
-export { selectKnight, selectPawn };
+function selectRook(this: Chess, cell: ICell) {
+	_setHorizontalAndVertical.call(this, cell);
+}
+
+function selectBishop(this: Chess, cell: ICell) {
+	_setDiagonalIndexs.call(this, cell);
+}
+
+function selectQueen(this: Chess, cell: ICell) {
+	_setDiagonalIndexs.call(this, cell);
+	_setHorizontalAndVertical.call(this, cell);
+}
+
+function _setByFunc(
+	this: Chess,
+	{ x, y, color }: ICell,
+	callBack: ([a, b]: number[]) => number[]
+) {
+	let cellArr = [x, y];
+
+	do {
+		cellArr = callBack(cellArr);
+		let cell = this._getCell(cellArr[0], cellArr[1]);
+
+		if (cell?.figure) {
+			if (cell?.color !== color) {
+				cell.isUnderAtack = true;
+			}
+
+			break;
+		}
+
+		cell.canMove = true;
+	} while (this._getCell(cellArr[0], cellArr[1]).id);
+}
+
+function _setHorizontalAndVertical(this: Chess, cell: ICell) {
+	let funcs = [
+		([r, c]: number[]) => [r + 1, c],
+		([r, c]: number[]) => [r - 1, c],
+		([r, c]: number[]) => [r, c - 1],
+		([r, c]: number[]) => [r, c + 1]
+	];
+
+	funcs.forEach((func) => {
+		_setByFunc.call(this, cell, func);
+	});
+}
+
+function _setDiagonalIndexs(this: Chess, cell: ICell) {
+	let funcs = [
+		([r, c]: number[]) => [r + 1, c + 1],
+		([r, c]: number[]) => [r - 1, c - 1],
+		([r, c]: number[]) => [r + 1, c - 1],
+		([r, c]: number[]) => [r - 1, c + 1]
+	];
+
+	funcs.forEach((func) => {
+		_setByFunc.call(this, cell, func);
+	});
+}
+
+export { selectKnight, selectPawn, selectRook, selectBishop, selectQueen };
