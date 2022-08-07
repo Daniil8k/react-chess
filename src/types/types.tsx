@@ -1,5 +1,6 @@
 export type color = "white" | "black";
 export type figure = "rook" | "knight" | "bishop" | "queen" | "king" | "pawn";
+export type captureFigure = "rook" | "knight" | "bishop" | "queen" | "pawn";
 
 export enum EFigure {
 	rook = "rook",

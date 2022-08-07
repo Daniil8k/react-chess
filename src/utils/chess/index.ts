@@ -4,7 +4,8 @@ import {
 	EShortFigureName,
 	ICell,
 	EFigure,
-	figure
+	figure,
+	captureFigure
 } from "types/types";
 import {
 	selectBishop,
@@ -29,16 +30,37 @@ const DEFAULT_BOARD_TEMPLATE = `
 const SIZE = 8;
 
 export default class Chess {
-	player: color;
+	playerColor: color;
 	board: ICell[];
 	isCheck: boolean;
 	isCheckmate: boolean;
+	capturedFiguresMap: {
+		[key in color]: {
+			[key in captureFigure]: number;
+		};
+	};
 
 	constructor() {
-		this.player = "white";
+		this.playerColor = "white";
 		this.isCheck = false;
 		this.isCheckmate = false;
 		this.board = this._getDefaultBoard();
+		this.capturedFiguresMap = {
+			white: {
+				queen: 0,
+				knight: 0,
+				rook: 0,
+				bishop: 0,
+				pawn: 0
+			},
+			black: {
+				queen: 0,
+				knight: 0,
+				rook: 0,
+				bishop: 0,
+				pawn: 0
+			}
+		};
 	}
 
 	private _getDefaultBoard() {
@@ -80,7 +102,8 @@ export default class Chess {
 			return [null, null];
 
 		const { figure, color } = toCell;
-		this._eatFigure(selectedCell, toCell);
+		this._moveFigure(selectedCell, toCell);
+		this._captureFigure(figure, color);
 		this._clearBoard();
 		this._changePlayer();
 		return [figure, color];
@@ -113,15 +136,22 @@ export default class Chess {
 		}
 	}
 
-	protected _eatFigure(cell: ICell, toCell: ICell) {
+	protected _moveFigure(cell: ICell, toCell: ICell) {
 		toCell.figure = cell?.figure;
 		toCell.color = cell?.color;
 		cell.figure = null;
 		cell.color = null;
 	}
 
+	protected _captureFigure(figure: figure | null, color: color | null) {
+		if (figure && color) {
+			let winColor: color = color === "white" ? "black" : "white";
+			this.capturedFiguresMap[winColor][figure as captureFigure] += 1;
+		}
+	}
+
 	protected _changePlayer() {
-		this.player = this.player === "white" ? "black" : "white";
+		this.playerColor = this.playerColor === "white" ? "black" : "white";
 	}
 
 	protected _clearBoard() {

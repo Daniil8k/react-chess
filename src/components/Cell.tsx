@@ -10,7 +10,6 @@ interface FigureProps extends ICell {
 const Cell: FC<FigureProps> = ({ playerColor, onSelect, ...cell }) => {
 	const { x, y, figure, color, isSelected, canMove, isUnderAtack } = cell;
 	const isCurrentPlayer = playerColor === color;
-
 	const onClick = () => {
 		if (isCurrentPlayer || canMove || isUnderAtack) {
 			onSelect(cell);
