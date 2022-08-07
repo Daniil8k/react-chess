@@ -8,6 +8,7 @@ import {
 } from "types/types";
 import {
 	selectBishop,
+	selectKing,
 	selectKnight,
 	selectPawn,
 	selectQueen,
@@ -105,6 +106,9 @@ export default class Chess {
 				break;
 			case EFigure.queen:
 				selectQueen.call(this, cell);
+				break;
+			case EFigure.king:
+				selectKing.call(this, cell);
 				break;
 		}
 	}
