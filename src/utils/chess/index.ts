@@ -6,6 +6,7 @@ import {
 	EFigure,
 	figure
 } from "types/types";
+import { selectKnight, selectPawn } from "./select";
 
 const EMPTY_CELL = "..";
 const DEFAULT_BOARD_TEMPLATE = `
@@ -85,25 +86,26 @@ export default class Chess {
 		cell.isSelected = true;
 		switch (cell?.figure) {
 			case EFigure.knight:
-				this._selectKnight(cell);
+				selectKnight.call(this, cell);
 				break;
 			case EFigure.pawn:
-				this._selectPawn(cell);
+				selectPawn.call(this, cell);
+				break;
 		}
 	}
 
-	private _eatFigure(cell: ICell, toCell: ICell) {
+	protected _eatFigure(cell: ICell, toCell: ICell) {
 		toCell.figure = cell?.figure;
 		toCell.color = cell?.color;
 		cell.figure = null;
 		cell.color = null;
 	}
 
-	private _changePlayer() {
+	protected _changePlayer() {
 		this.player = this.player === "white" ? "black" : "white";
 	}
 
-	private _clearBoard() {
+	protected _clearBoard() {
 		this.board.forEach((cell) => {
 			cell.canMove = false;
 			cell.isUnderAtack = false;
@@ -111,76 +113,12 @@ export default class Chess {
 		});
 	}
 
-	private _getSelectedCell() {
+	protected _getSelectedCell() {
 		return this.board.find((cell) => cell.isSelected);
 	}
 
-	private _getCell(x: number, y: number) {
+	protected _getCell(x: number, y: number) {
 		let cell = this.board.find((cell) => cell.x === x && cell.y === y);
 		return cell ? cell : ({} as ICell);
-	}
-
-	private _updateCell(x: number, y: number, color: color) {
-		let cell = this._getCell(x, y);
-
-		if (cell.figure) {
-			if (cell?.color !== color) {
-				cell.isUnderAtack = true;
-			}
-		} else {
-			cell.canMove = true;
-		}
-	}
-
-	private _selectKnight({ x, y, color }: ICell) {
-		let cellArrays = [
-			[x - 1, y + 2],
-			[x + 1, y + 2],
-			[x - 1, y - 2],
-			[x + 1, y - 2],
-			[x - 2, y + 1],
-			[x + 2, y + 1],
-			[x - 2, y - 1],
-			[x + 2, y - 1]
-		];
-
-		cellArrays.forEach((cellArr) => {
-			const [posX, posY] = cellArr;
-			color && this._updateCell(posX, posY, color);
-		});
-	}
-
-	private _selectPawn({ x, y, color }: ICell) {
-		let dir = color === "white" ? 1 : -1;
-		let isFirstMove = color === "white" ? y === 1 : y === 6;
-		let moveCells = [[x, y + 1 * dir]];
-		let atackCells = [
-			[x - 1, y + 1 * dir],
-			[x + 1, y + 1 * dir]
-		];
-
-		if (isFirstMove) {
-			moveCells.push([x, y+ 2 * dir]);
-		}
-
-		for (const cellArr of moveCells) {
-			const [posX, posY] = cellArr;
-			let cell = this._getCell(posX, posY);
-
-			if (cell?.figure) {
-				break;
-			} else {
-				cell.canMove = true;
-			}
-		}
-
-		atackCells.forEach((cellArr) => {
-			const [posX, posY] = cellArr;
-			let cell = this._getCell(posX, posY);
-
-			if (cell.figure && cell.color !== color) {
-				cell.isUnderAtack = true;
-			}
-		});
 	}
 }

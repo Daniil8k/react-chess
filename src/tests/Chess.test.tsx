@@ -41,3 +41,18 @@ it("Move knight", () => {
 	chess.move(7, 2);
 	expect(chess.board).toEqual(initialBoard);
 });
+
+it("Pawn first move", () => {
+	let cell_1_6 = _getCell(initialBoard, 6, 1);
+	let cell_3_6 = _getCell(initialBoard, 6, 3);
+
+	cell_3_6.figure = cell_1_6?.figure;
+	cell_3_6.color = cell_1_6?.color;
+	cell_1_6.figure = null;
+	cell_1_6.color = null;
+	cell_1_6.isSelected = false;
+
+	chess.select(6, 1);
+	chess.move(6, 3);
+	expect(chess.board).toEqual(initialBoard);
+});
