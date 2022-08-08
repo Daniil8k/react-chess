@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/react-chess/static/css/main.47c1d86b.css",
-    "main.js": "/react-chess/static/js/main.8ae07d1d.js",
+    "main.css": "/react-chess/static/css/main.723fa04a.css",
+    "main.js": "/react-chess/static/js/main.3a526a97.js",
     "static/media/rook_black.svg": "/react-chess/static/media/rook_black.fdc575582c2cbe2ec82093702945226f.svg",
     "static/media/knight_black.svg": "/react-chess/static/media/knight_black.7930be9e07b51bc0e069b1d77e31261a.svg",
     "static/media/queen_black.svg": "/react-chess/static/media/queen_black.cf388bf415c0d33ec16f23593b8d0d91.svg",
@@ -15,11 +15,11 @@
     "static/media/pawn.svg": "/react-chess/static/media/pawn.50273cc6d86861932d0a01c38274009a.svg",
     "static/media/pawn_black.svg": "/react-chess/static/media/pawn_black.be5d44ca5ee868885d216188996e3a00.svg",
     "index.html": "/react-chess/index.html",
-    "main.47c1d86b.css.map": "/react-chess/static/css/main.47c1d86b.css.map",
-    "main.8ae07d1d.js.map": "/react-chess/static/js/main.8ae07d1d.js.map"
+    "main.723fa04a.css.map": "/react-chess/static/css/main.723fa04a.css.map",
+    "main.3a526a97.js.map": "/react-chess/static/js/main.3a526a97.js.map"
   },
   "entrypoints": [
-    "static/css/main.47c1d86b.css",
-    "static/js/main.8ae07d1d.js"
+    "static/css/main.723fa04a.css",
+    "static/js/main.3a526a97.js"
   ]
 }
