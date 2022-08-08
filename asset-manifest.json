@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/react-chess/static/css/main.a46f1580.css",
-    "main.js": "/react-chess/static/js/main.cf6f114a.js",
+    "main.js": "/react-chess/static/js/main.b501ae33.js",
     "static/media/rook_black.svg": "/react-chess/static/media/rook_black.fdc575582c2cbe2ec82093702945226f.svg",
     "static/media/knight_black.svg": "/react-chess/static/media/knight_black.7930be9e07b51bc0e069b1d77e31261a.svg",
     "static/media/queen_black.svg": "/react-chess/static/media/queen_black.cf388bf415c0d33ec16f23593b8d0d91.svg",
@@ -16,10 +16,10 @@
     "static/media/pawn_black.svg": "/react-chess/static/media/pawn_black.be5d44ca5ee868885d216188996e3a00.svg",
     "index.html": "/react-chess/index.html",
     "main.a46f1580.css.map": "/react-chess/static/css/main.a46f1580.css.map",
-    "main.cf6f114a.js.map": "/react-chess/static/js/main.cf6f114a.js.map"
+    "main.b501ae33.js.map": "/react-chess/static/js/main.b501ae33.js.map"
   },
   "entrypoints": [
     "static/css/main.a46f1580.css",
-    "static/js/main.cf6f114a.js"
+    "static/js/main.b501ae33.js"
   ]
 }
