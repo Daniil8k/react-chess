@@ -50,7 +50,7 @@ const App: FC = () => {
 				<span className="text-yellow-500">Warning!</span>
 				<span>Still in development...</span>
 			</div>
-			<div className="w-fit flex gap-2 p-2 items-center justify-center flex-wrap">
+			<div className="w-fit flex gap-2 items-center justify-center flex-wrap">
 				<div className="w-fit">
 					<BoardHeader
 						playerColor={state.playerColor}
