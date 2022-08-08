@@ -1,6 +1,10 @@
 # React chess
+Two player chess game.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![chrome-capture-2022-7-8 (1)](https://user-images.githubusercontent.com/93822098/183313316-146dc84e-d995-495e-940b-4965dc4ace3e.gif)
+
+## Demo
+https://daniil8k.github.io/react-chess/
 
 ## Available Scripts
 
