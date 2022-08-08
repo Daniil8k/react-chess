@@ -45,22 +45,28 @@ const App: FC = () => {
 	}, []);
 
 	return (
-		<div className="w-fit flex gap-2 p-2 items-center justify-center flex-wrap">
-			<div className="w-fit">
-				<BoardHeader
-					playerColor={state.playerColor}
-					isCheck={state.isCheck}
-					isCheckmate={state.isCheckmate}
-				/>
-				<Board
-					isCheck={state.isCheck}
-					isCheckmate={state.isCheckmate}
-					playerColor={state.playerColor}
-					board={state.board}
-					onTurn={onTurn}
-				/>
+		<div>
+			<div className="flex gap-1 w-fit mx-auto text-center text-xl bold mb-2">
+				<span className="text-yellow-500">Warning!</span>
+				<span>Still in development...</span>
 			</div>
-			<ScoreBoard capturedFiguresMap={state.capturedFiguresMap} />
+			<div className="w-fit flex gap-2 p-2 items-center justify-center flex-wrap">
+				<div className="w-fit">
+					<BoardHeader
+						playerColor={state.playerColor}
+						isCheck={state.isCheck}
+						isCheckmate={state.isCheckmate}
+					/>
+					<Board
+						isCheck={state.isCheck}
+						isCheckmate={state.isCheckmate}
+						playerColor={state.playerColor}
+						board={state.board}
+						onTurn={onTurn}
+					/>
+				</div>
+				<ScoreBoard capturedFiguresMap={state.capturedFiguresMap} />
+			</div>
 		</div>
 	);
 };
