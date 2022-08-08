@@ -95,24 +95,10 @@ export default class Chess {
 		return board;
 	}
 
-	public move(toX: number, toY: number): [figure | null, color | null] {
-		const toCell = this._getCell(toX, toY);
-		const selectedCell = this._getSelectedCell();
-		if (!toCell || !selectedCell || !(toCell?.isUnderAtack || toCell?.canMove))
-			return [null, null];
-
-		const { figure, color } = toCell;
-		this._moveFigure(selectedCell, toCell);
-		this._captureFigure(figure, color);
-		this._clearBoard();
-		this._changePlayer();
-		return [figure, color];
-	}
-
-	public select(x: number, y: number) {
+	public select(x: number, y: number, noClear = false) {
 		let cell = this._getCell(x, y);
 
-		this._clearBoard();
+		!noClear && this._clearBoard();
 		cell.isSelected = true;
 		switch (cell?.figure) {
 			case EFigure.knight:
@@ -136,6 +122,94 @@ export default class Chess {
 		}
 	}
 
+	public move(toX: number, toY: number): [figure | null, color | null] {
+		const toCell = this._getCell(toX, toY);
+		const selectedCell = this._getSelectedCell();
+		if (
+			!toCell ||
+			!selectedCell ||
+			!selectedCell.figure ||
+			!selectedCell.color ||
+			!(toCell?.isUnderAtack || toCell?.canMove)
+		)
+			return [null, null];
+
+		const { figure, color } = toCell;
+		this._moveFigure(selectedCell, toCell);
+		this._captureFigure(figure, color);
+		this._clearBoard();
+		this._changePlayer();
+		this._afterMove();
+
+		return [figure, color];
+	}
+
+	protected _afterMove() {
+		let playerKing = this._getKingCell(this.playerColor);
+		if (!playerKing) return;
+
+		if (this._testCheck(playerKing)) {
+			this.isCheck = true;
+			this.select(playerKing.x, playerKing.y, true);
+
+			if (this._testCheckmate(playerKing)) {
+				this.isCheckmate = true;
+			}
+		}
+	}
+
+	protected _testCheck(playerKing: ICell) {
+		let enemyColor: color = playerKing.color === "white" ? "black" : "white";
+
+		this.board.forEach((cell) => {
+			if (cell.color === enemyColor) {
+				this.select(cell.x, cell.y, true);
+			}
+		});
+
+		let isCheck = !!playerKing?.isUnderAtack;
+		this._clearBoard();
+
+		return isCheck;
+	}
+
+	protected _getDeepCopy<T>(obj: T): T {
+		return JSON.parse(JSON.stringify(obj));
+	}
+
+	protected _testCheckmate(playerKing: ICell) {
+		let kingCanMoveArr = this.board.filter(
+			(cell) => cell.canMove || cell.isUnderAtack
+		);
+		let boardCopy = this._getDeepCopy(this.board);
+
+		let kingPossibleMoves = kingCanMoveArr.filter((cell) => {
+			if (!playerKing || !playerKing.color) return false;
+
+			this.board = this._getDeepCopy(boardCopy);
+			this.select(playerKing.x, playerKing.y);
+			this.move(cell.x, cell.y);
+
+			let newPlayerKing = this._getKingCell(playerKing.color);
+			return newPlayerKing && !this._testCheck(newPlayerKing);
+		});
+
+		this.board = boardCopy;
+		this._clearBoard();
+
+		kingPossibleMoves.forEach((cell) => {
+			if (cell.figure) {
+				if (cell?.color !== playerKing.color) {
+					cell.isUnderAtack = true;
+				}
+			} else {
+				cell.canMove = true;
+			}
+		});
+
+		return !kingPossibleMoves.length;
+	}
+
 	protected _moveFigure(cell: ICell, toCell: ICell) {
 		toCell.figure = cell?.figure;
 		toCell.color = cell?.color;
@@ -144,7 +218,7 @@ export default class Chess {
 	}
 
 	protected _captureFigure(figure: figure | null, color: color | null) {
-		if (figure && color) {
+		if (figure && figure !== "king" && color) {
 			let winColor: color = color === "white" ? "black" : "white";
 			this.capturedFiguresMap[winColor][figure as captureFigure] += 1;
 		}
@@ -155,11 +229,20 @@ export default class Chess {
 	}
 
 	protected _clearBoard() {
+		this.isCheck = false;
+		this.isCheckmate = false;
+
 		this.board.forEach((cell) => {
 			cell.canMove = false;
 			cell.isUnderAtack = false;
 			cell.isSelected = false;
 		});
+	}
+
+	protected _getKingCell(color: color) {
+		return this.board.find(
+			(cell) => cell.figure === "king" && cell.color === color
+		);
 	}
 
 	protected _getSelectedCell() {

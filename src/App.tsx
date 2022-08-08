@@ -53,6 +53,8 @@ const App: FC = () => {
 					isCheckmate={state.isCheckmate}
 				/>
 				<Board
+					isCheck={state.isCheck}
+					isCheckmate={state.isCheckmate}
 					playerColor={state.playerColor}
 					board={state.board}
 					onTurn={onTurn}

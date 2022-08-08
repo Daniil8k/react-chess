@@ -4,14 +4,20 @@ import Figure from "./Figure";
 
 interface FigureProps extends ICell {
 	playerColor: color;
+	canSelect: (cell: ICell) => boolean;
 	onSelect: (cell: ICell) => void;
 }
 
-const Cell: FC<FigureProps> = ({ playerColor, onSelect, ...cell }) => {
+const Cell: FC<FigureProps> = ({
+	playerColor,
+	canSelect,
+	onSelect,
+	...cell
+}) => {
 	const { x, y, figure, color, isSelected, canMove, isUnderAtack } = cell;
-	const isCurrentPlayer = playerColor === color;
+
 	const onClick = () => {
-		if (isCurrentPlayer || canMove || isUnderAtack) {
+		if (canSelect(cell)) {
 			onSelect(cell);
 		}
 	};
@@ -25,10 +31,8 @@ const Cell: FC<FigureProps> = ({ playerColor, onSelect, ...cell }) => {
 			}}
 			className={[
 				"absolute w-10 h-10 flex items-center justify-center",
-				isCurrentPlayer || canMove || isUnderAtack
-					? "cursor-pointer"
-					: "cursor-default",
-				isCurrentPlayer ? "hover:bg-accent" : "",
+				canSelect(cell) ? "cursor-pointer" : "cursor-default",
+				canSelect(cell) ? "hover:bg-accent" : "",
 				canMove ? "hover:bg-green-500" : "",
 				isSelected ? "bg-accent" : "",
 				isUnderAtack ? "bg-red-500" : ""
