@@ -23,9 +23,10 @@ const Board: FC<BoardProps> = ({
 			let isCurrentPlayer = playerColor === cell.color;
 
 			return (
-				cell.canMove ||
-				cell.isUnderAtack ||
-				(isCurrentPlayer && !isCheck && !isCheckmate)
+				(cell.canMove ||
+					cell.isUnderAtack ||
+					(isCurrentPlayer && !isCheck && !isCheckmate)) &&
+				cell.figure !== "king"
 			);
 		},
 		[playerColor, isCheck, isCheckmate]

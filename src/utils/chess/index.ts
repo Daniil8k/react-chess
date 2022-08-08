@@ -130,7 +130,8 @@ export default class Chess {
 			!selectedCell ||
 			!selectedCell.figure ||
 			!selectedCell.color ||
-			!(toCell?.isUnderAtack || toCell?.canMove)
+			!(toCell?.isUnderAtack || toCell?.canMove) ||
+			toCell.figure === 'king'
 		)
 			return [null, null];
 
