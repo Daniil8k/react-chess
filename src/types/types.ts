@@ -22,12 +22,6 @@ export interface ICell {
 	isUnderAtack?: boolean;
 }
 
-export interface IPlayer {
-	id: string;
-	color: color;
-	eatenFigures: figure[];
-}
-
 export enum EShortColor {
 	b = "black",
 	w = "white"
