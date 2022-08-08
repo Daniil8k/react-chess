@@ -1,59 +1,66 @@
-import Board, { IBoardState } from "components/Board";
+import Board from "components/Board";
+import BoardHeader from "components/BoardHeader";
 import ScoreBoard from "components/ScoreBoard";
-import { useState } from "react";
+import { FC, useCallback, useState } from "react";
+import { captureFigure, color, ICell } from "types/types";
+import Chess from "utils/chess";
 
-function App() {
-	const [state, setState] = useState<IBoardState>({
-		playerColor: "white",
-		isCheck: false,
-		isCheckmate: false,
-		capturedFiguresMap: {
-			white: {
-				queen: 0,
-				knight: 0,
-				rook: 0,
-				bishop: 0,
-				pawn: 0
-			},
-			black: {
-				queen: 0,
-				knight: 0,
-				rook: 0,
-				bishop: 0,
-				pawn: 0
-			}
-		}
+interface IChessState {
+	playerColor: color;
+	board: ICell[];
+	isCheck: boolean;
+	isCheckmate: boolean;
+	capturedFiguresMap: {
+		[key in color]: {
+			[key in captureFigure]: number;
+		};
+	};
+}
+
+const chess = new Chess();
+
+const App: FC = () => {
+	const [state, setState] = useState<IChessState>({
+		playerColor: chess.playerColor,
+		board: chess.board,
+		isCheck: chess.isCheck,
+		isCheckmate: chess.isCheckmate,
+		capturedFiguresMap: chess.capturedFiguresMap
 	});
 
+	const onTurn = useCallback((cell: ICell) => {
+		if (cell.canMove || cell.isUnderAtack) {
+			chess.move(cell.x, cell.y);
+		} else {
+			chess.select(cell.x, cell.y);
+		}
+
+		setState({
+			playerColor: chess.playerColor,
+			board: chess.board,
+			isCheck: chess.isCheck,
+			isCheckmate: chess.isCheckmate,
+			capturedFiguresMap: chess.capturedFiguresMap
+		});
+	}, []);
+
 	return (
-		<div className="min-h-screen flex gap-2 items-center justify-center">
-			<main className="w-fit">
-				<header className="flex items-center justify-between mb-2">
-					<span>
-						Move: <span className="font-bold">{state.playerColor}</span>
-					</span>
-					<span
-						style={{ opacity: state.isCheck ? 1 : 0 }}
-						className="text-red-500"
-					>
-						Check
-					</span>
-				</header>
-				<Board state={state} setState={setState} />
-			</main>
-			<aside>
-				<ScoreBoard
-					className="mb-3"
-					playerColor="white"
-					caputeredFigures={state.capturedFiguresMap.white}
+		<div className="w-fit flex gap-2 p-2 items-center justify-center flex-wrap">
+			<div className="w-fit">
+				<BoardHeader
+					playerColor={state.playerColor}
+					isCheck={state.isCheck}
+					isCheckmate={state.isCheckmate}
 				/>
-				<ScoreBoard
-					playerColor="black"
-					caputeredFigures={state.capturedFiguresMap.black}
+				<Board
+					playerColor={state.playerColor}
+					board={state.board}
+					onTurn={onTurn}
 				/>
-			</aside>
+			</div>
+			<ScoreBoard capturedFiguresMap={state.capturedFiguresMap} />
 		</div>
 	);
-}
+};
 
 export default App;

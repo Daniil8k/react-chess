@@ -1,30 +1,52 @@
 import { FC } from "react";
-import { color, figure } from "types/types";
+import { captureFigure, color } from "types/types";
 
 interface ScoreBoardProps {
-	playerColor: color;
-	caputeredFigures: {
-		[key in figure]?: number;
+	capturedFiguresMap: {
+		[key in color]: {
+			[key in captureFigure]: number;
+		};
 	};
 	className?: string;
 }
 
-const ScoreBoard: FC<ScoreBoardProps> = ({
-	className,
-	playerColor,
-	caputeredFigures
-}) => {
+interface BoardPartProps {
+	color: color;
+	capturedFigures: {
+		[key in captureFigure]: number;
+	};
+	className?: string;
+}
+
+const BoardPart: FC<BoardPartProps> = ({ color, capturedFigures }) => {
 	return (
-		<div className={["w-36", className].join(" ")}>
-			<span className="font-bold">{playerColor}</span>
-			{Object.entries(caputeredFigures).map(([key, value]) => (
-				<div
-					style={{ fontWeight: value ? "bold" : "normal" }}
-					className="flex justify-between px-2"
-				>
-					<span>{key}</span>
-					<span>{value}</span>
-				</div>
+		<div>
+			<span className="font-bold">{color}</span>
+			<div>
+				{Object.entries(capturedFigures).map(([figure, count]) => (
+					<div
+						key={`${color}_${figure}`}
+						style={{ fontWeight: count ? "bold" : "normal" }}
+						className="flex justify-between px-2"
+					>
+						<span>{figure}</span>
+						<span>{count}</span>
+					</div>
+				))}
+			</div>
+		</div>
+	);
+};
+
+const ScoreBoard: FC<ScoreBoardProps> = ({ capturedFiguresMap }) => {
+	return (
+		<div className="min-w-[18rem] flex flex-col gap-2 sm:min-w-[9rem]">
+			{Object.entries(capturedFiguresMap).map(([color, capturedFigures]) => (
+				<BoardPart
+					key={color}
+					color={color as color}
+					capturedFigures={capturedFigures}
+				/>
 			))}
 		</div>
 	);
