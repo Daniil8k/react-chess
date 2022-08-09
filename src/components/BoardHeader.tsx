@@ -21,7 +21,7 @@ const BoardHeader: FC<BoardHeaderProps> = ({
 				style={{ opacity: isCheck || isCheckmate ? 1 : 0 }}
 				className="text-red-500"
 			>
-				{isCheck ? "Check" : "Checkmate"}
+				{isCheckmate ? "Checkmate" : "Check"}
 			</span>
 		</header>
 	);

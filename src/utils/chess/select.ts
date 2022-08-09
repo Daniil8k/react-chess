@@ -1,7 +1,8 @@
 import { color, ICell } from "types/types";
-import Chess from "./index";
 
-function selectPawn(this: Chess, { x, y, color }: ICell) {
+type GetCell = (x: number, y: number) => ICell;
+
+function selectPawn({ x, y, color }: ICell, getCell: GetCell) {
 	let dir = color === "white" ? 1 : -1;
 	let isFirstMove = color === "white" ? y === 1 : y === 6;
 	let moveCells = [[x, y + 1 * dir]];
@@ -16,7 +17,7 @@ function selectPawn(this: Chess, { x, y, color }: ICell) {
 
 	for (const cellArr of moveCells) {
 		const [posX, posY] = cellArr;
-		let cell = this._getCell(posX, posY);
+		let cell = getCell(posX, posY);
 
 		if (cell?.figure) {
 			break;
@@ -25,10 +26,10 @@ function selectPawn(this: Chess, { x, y, color }: ICell) {
 		}
 	}
 
-	_selectByArr.call(this, atackCells, color, true);
+	_selectByArr(atackCells, getCell, color, true);
 }
 
-function selectKnight(this: Chess, { x, y, color }: ICell) {
+function selectKnight({ x, y, color }: ICell, getCell: GetCell) {
 	let cellArrays = [
 		[x - 1, y + 2],
 		[x + 1, y + 2],
@@ -40,10 +41,10 @@ function selectKnight(this: Chess, { x, y, color }: ICell) {
 		[x + 2, y - 1]
 	];
 
-	_selectByArr.call(this, cellArrays, color);
+	_selectByArr(cellArrays, getCell, color);
 }
 
-function selectKing(this: Chess, { x, y, color }: ICell) {
+function selectKing({ x, y, color }: ICell, getCell: GetCell) {
 	let cellArrays = [
 		[x - 1, y],
 		[x - 1, y + 1],
@@ -55,31 +56,31 @@ function selectKing(this: Chess, { x, y, color }: ICell) {
 		[x - 1, y - 1]
 	];
 
-	_selectByArr.call(this, cellArrays, color);
+	_selectByArr(cellArrays, getCell, color);
 }
 
-function selectRook(this: Chess, cell: ICell) {
-	_selectHorizontalAndVertical.call(this, cell);
+function selectRook(cell: ICell, getCell: GetCell) {
+	_selectHorizontalAndVertical(cell, getCell);
 }
 
-function selectBishop(this: Chess, cell: ICell) {
-	_selectDiagonal.call(this, cell);
+function selectBishop(cell: ICell, getCell: GetCell) {
+	_selectDiagonal(cell, getCell);
 }
 
-function selectQueen(this: Chess, cell: ICell) {
-	_selectDiagonal.call(this, cell);
-	_selectHorizontalAndVertical.call(this, cell);
+function selectQueen(cell: ICell, getCell: GetCell) {
+	_selectDiagonal(cell, getCell);
+	_selectHorizontalAndVertical(cell, getCell);
 }
 
 function _selectByArr(
-	this: Chess,
 	cellArrays: number[][],
+	getCell: GetCell,
 	color: color | null,
 	onlyAtack = false
 ) {
 	cellArrays.forEach((cellArr) => {
 		const [posX, posY] = cellArr;
-		let cell = this._getCell(posX, posY);
+		let cell = getCell(posX, posY);
 
 		if (cell.figure) {
 			if (cell?.color !== color) {
@@ -92,15 +93,15 @@ function _selectByArr(
 }
 
 function _selectByFunc(
-	this: Chess,
 	{ x, y, color }: ICell,
+	getCell: GetCell,
 	callBack: ([a, b]: number[]) => number[]
 ) {
 	let cellArr = [x, y];
 
 	do {
 		cellArr = callBack(cellArr);
-		let cell = this._getCell(cellArr[0], cellArr[1]);
+		let cell = getCell(cellArr[0], cellArr[1]);
 
 		if (cell?.figure) {
 			if (cell?.color !== color) {
@@ -111,10 +112,10 @@ function _selectByFunc(
 		}
 
 		cell.canMove = true;
-	} while (this._getCell(cellArr[0], cellArr[1]).id);
+	} while (getCell(cellArr[0], cellArr[1]).id);
 }
 
-function _selectHorizontalAndVertical(this: Chess, cell: ICell) {
+function _selectHorizontalAndVertical(cell: ICell, getCell: GetCell) {
 	let funcs = [
 		([r, c]: number[]) => [r + 1, c],
 		([r, c]: number[]) => [r - 1, c],
@@ -123,11 +124,11 @@ function _selectHorizontalAndVertical(this: Chess, cell: ICell) {
 	];
 
 	funcs.forEach((func) => {
-		_selectByFunc.call(this, cell, func);
+		_selectByFunc(cell, getCell, func);
 	});
 }
 
-function _selectDiagonal(this: Chess, cell: ICell) {
+function _selectDiagonal(cell: ICell, getCell: GetCell) {
 	let funcs = [
 		([r, c]: number[]) => [r + 1, c + 1],
 		([r, c]: number[]) => [r - 1, c - 1],
@@ -136,7 +137,7 @@ function _selectDiagonal(this: Chess, cell: ICell) {
 	];
 
 	funcs.forEach((func) => {
-		_selectByFunc.call(this, cell, func);
+		_selectByFunc(cell, getCell, func);
 	});
 }
 

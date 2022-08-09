@@ -28,6 +28,16 @@ const App: FC = () => {
 		capturedFiguresMap: chess.capturedFiguresMap
 	});
 
+	const showCheckmateAlert = () => {
+		if (chess.isCheckmate) {
+			setTimeout(() => {
+				let winColor = chess.playerColor === "white" ? "black" : "white";
+				alert(`${winColor} win!`);
+				window.location.reload();
+			});
+		}
+	};
+
 	const onTurn = useCallback((cell: ICell) => {
 		if (cell.canMove || cell.isUnderAtack) {
 			chess.move(cell.x, cell.y);
@@ -35,6 +45,7 @@ const App: FC = () => {
 			chess.select(cell.x, cell.y);
 		}
 
+		showCheckmateAlert();
 		setState({
 			playerColor: chess.playerColor,
 			board: chess.board,
@@ -45,28 +56,20 @@ const App: FC = () => {
 	}, []);
 
 	return (
-		<div>
-			<div className="flex gap-1 w-fit mx-auto text-center text-xl bold mb-2">
-				<span className="text-yellow-500">Warning!</span>
-				<span>Still in development...</span>
+		<div className="w-fit flex gap-2 items-center justify-center flex-wrap">
+			<div className="w-fit">
+				<BoardHeader
+					playerColor={state.playerColor}
+					isCheck={state.isCheck}
+					isCheckmate={state.isCheckmate}
+				/>
+				<Board
+					playerColor={state.playerColor}
+					board={state.board}
+					onTurn={onTurn}
+				/>
 			</div>
-			<div className="w-fit flex gap-2 items-center justify-center flex-wrap">
-				<div className="w-fit">
-					<BoardHeader
-						playerColor={state.playerColor}
-						isCheck={state.isCheck}
-						isCheckmate={state.isCheckmate}
-					/>
-					<Board
-						isCheck={state.isCheck}
-						isCheckmate={state.isCheckmate}
-						playerColor={state.playerColor}
-						board={state.board}
-						onTurn={onTurn}
-					/>
-				</div>
-				<ScoreBoard capturedFiguresMap={state.capturedFiguresMap} />
-			</div>
+			<ScoreBoard capturedFiguresMap={state.capturedFiguresMap} />
 		</div>
 	);
 };
