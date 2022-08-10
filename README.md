@@ -1,7 +1,7 @@
 # React chess
-Two player chess game.
+Custom two player chess.
 
-![chrome-capture-2022-7-8 (1)](https://user-images.githubusercontent.com/93822098/183313316-146dc84e-d995-495e-940b-4965dc4ace3e.gif)
+![chrome-capture-2022-7-9](https://user-images.githubusercontent.com/93822098/183749779-dbc74ee1-f93f-461f-925a-ec1763474b4c.gif)
 
 ## Demo
 https://daniil8k.github.io/react-chess/
