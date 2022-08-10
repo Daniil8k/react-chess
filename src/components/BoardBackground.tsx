@@ -1,6 +1,11 @@
 import React, { FC } from "react";
 
-const Piece = ({ x, y }: { x: number; y: number }) => {
+interface PieceProps {
+	x: number;
+	y: number;
+}
+
+const Piece: FC<PieceProps> = ({ x, y }) => {
 	const isDark = (x + y) % 2 === 0;
 
 	return (
@@ -13,7 +18,11 @@ const Piece = ({ x, y }: { x: number; y: number }) => {
 	);
 };
 
-const Row = ({ y }: { y: number }) => {
+interface RowProps {
+	y: number;
+}
+
+const Row: FC<RowProps> = ({ y }) => {
 	return (
 		<>
 			{new Array(8).fill(0).map((_, x) => (
