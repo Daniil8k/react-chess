@@ -1,23 +1,21 @@
-import React, { FC } from "react";
+import React, { FC, useMemo } from "react";
 import { color, ICell } from "types/types";
 import Figure from "./Figure";
 
 interface FigureProps extends ICell {
 	playerColor: color;
-	canSelect: (cell: ICell) => boolean;
 	onSelect: (cell: ICell) => void;
 }
 
-const Cell: FC<FigureProps> = ({
-	playerColor,
-	canSelect,
-	onSelect,
-	...cell
-}) => {
+const Cell: FC<FigureProps> = ({ playerColor, onSelect, ...cell }) => {
 	const { x, y, figure, color, isSelected, canMove, isUnderAtack } = cell;
 
+	const canSelect = useMemo(() => {
+		return canMove || isUnderAtack || playerColor === color;
+	}, [playerColor, isUnderAtack, canMove, color]);
+
 	const onClick = () => {
-		if (canSelect(cell)) {
+		if (canSelect) {
 			onSelect(cell);
 		}
 	};
@@ -31,8 +29,8 @@ const Cell: FC<FigureProps> = ({
 			}}
 			className={[
 				"absolute w-10 h-10 flex items-center justify-center",
-				canSelect(cell) ? "cursor-pointer" : "cursor-default",
-				canSelect(cell) ? "hover:bg-accent" : "",
+				canSelect ? "cursor-pointer" : "cursor-default",
+				canSelect ? "hover:bg-accent" : "",
 				canMove ? "hover:bg-green-500" : "",
 				isSelected ? "bg-accent" : "",
 				isUnderAtack ? "bg-red-500" : ""
