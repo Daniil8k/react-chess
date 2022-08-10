@@ -1,9 +1,11 @@
-import Board from "components/Board";
+import BoardBackground from "components/BoardBackground";
 import BoardHeader from "components/BoardHeader";
 import ScoreBoard from "components/ScoreBoard";
-import { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useState } from "react";
 import { captureFigure, color, ICell } from "types/types";
 import Chess from "utils/chess";
+
+const Board = React.lazy(() => import('components/Board'))
 
 interface IChessState {
 	playerColor: color;
@@ -63,11 +65,14 @@ const App: FC = () => {
 					isCheck={state.isCheck}
 					isCheckmate={state.isCheckmate}
 				/>
-				<Board
-					playerColor={state.playerColor}
-					board={state.board}
-					onTurn={onTurn}
-				/>
+				<div className="relative">
+					<Board
+						playerColor={state.playerColor}
+						board={state.board}
+						onTurn={onTurn}
+					/>
+					<BoardBackground />
+				</div>
 			</div>
 			<ScoreBoard capturedFiguresMap={state.capturedFiguresMap} />
 		</div>

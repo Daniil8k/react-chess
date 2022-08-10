@@ -1,5 +1,4 @@
 import { FC, useCallback } from "react";
-import BoardBackground from "./BoardBackground";
 import { color, ICell } from "types/types";
 import Cell from "./Cell";
 
@@ -9,11 +8,7 @@ interface BoardProps {
 	onTurn: (cell: ICell) => void;
 }
 
-const Board: FC<BoardProps> = ({
-	playerColor,
-	board,
-	onTurn
-}) => {
+const Board: FC<BoardProps> = ({ playerColor, board, onTurn }) => {
 	const canSelect = useCallback(
 		(cell: ICell) => {
 			let isCurrentPlayer = playerColor === cell.color;
@@ -24,19 +19,16 @@ const Board: FC<BoardProps> = ({
 	);
 
 	return (
-		<div>
-			<div className="relative">
-				{board.map((cell) => (
-					<Cell
-						key={cell.id}
-						{...cell}
-						canSelect={canSelect}
-						playerColor={playerColor}
-						onSelect={onTurn}
-					/>
-				))}
-				<BoardBackground />
-			</div>
+		<div className="absolute w-full h-full">
+			{board.map((cell) => (
+				<Cell
+					key={cell.id}
+					{...cell}
+					canSelect={canSelect}
+					playerColor={playerColor}
+					onSelect={onTurn}
+				/>
+			))}
 		</div>
 	);
 };

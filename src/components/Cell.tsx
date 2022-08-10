@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { color, ICell } from "types/types";
-import Figure from "./Figure";
+// import Figure from "./Figure";
+const Figure = React.lazy(() => import('./Figure'))
 
 interface FigureProps extends ICell {
 	playerColor: color;
