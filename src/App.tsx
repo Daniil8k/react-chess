@@ -3,10 +3,34 @@ import BoardHeader from "components/BoardHeader";
 import ScoreBoard from "components/ScoreBoard";
 import React, { FC, useCallback, useState } from "react";
 import { ICell } from "types/types";
-import { getChessEmptyState, IChessState } from "utils/chess";
+import { IChess, IChessState } from "utils/chess";
 const Board = React.lazy(() => import("components/Board"));
 
-let chess = getChessEmptyState();
+let chess: IChess = {
+	board: [],
+	isCheck: false,
+	isCheckmate: false,
+	playerColor: "white",
+	capturedFiguresMap: {
+		white: {
+			queen: 0,
+			knight: 0,
+			rook: 0,
+			bishop: 0,
+			pawn: 0
+		},
+		black: {
+			queen: 0,
+			knight: 0,
+			rook: 0,
+			bishop: 0,
+			pawn: 0
+		}
+	},
+	move: (x, y) => {},
+	select: (x, y) => {}
+};
+
 import("utils/chess").then((Chess) => {
 	chess = new Chess.default();
 });
