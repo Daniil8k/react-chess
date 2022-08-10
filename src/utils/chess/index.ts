@@ -30,7 +30,50 @@ const DEFAULT_BOARD_TEMPLATE = `
 `;
 const SIZE = 8;
 
-export default class Chess {
+const ChessEmptyState: IChess = {
+	board: [],
+	isCheck: false,
+	isCheckmate: false,
+	playerColor: "white",
+	capturedFiguresMap: {
+		white: {
+			queen: 0,
+			knight: 0,
+			rook: 0,
+			bishop: 0,
+			pawn: 0
+		},
+		black: {
+			queen: 0,
+			knight: 0,
+			rook: 0,
+			bishop: 0,
+			pawn: 0
+		}
+	},
+	move: (x, y) => {},
+	select: (x, y) => {}
+};
+
+export const getChessEmptyState = () => getDeepCopy(ChessEmptyState);
+
+export interface IChessState {
+	playerColor: color;
+	board: ICell[];
+	isCheck: boolean;
+	isCheckmate: boolean;
+	capturedFiguresMap: {
+		[key in color]: {
+			[key in captureFigure]: number;
+		};
+	};
+}
+
+export interface IChess extends IChessState {
+	move: (x: number, y: number) => void;
+	select: (x: number, y: number) => void;
+}
+export default class Chess implements IChess {
 	private _playerColor: color;
 	private _isCheck: boolean;
 	private _isCheckmate: boolean;

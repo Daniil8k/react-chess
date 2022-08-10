@@ -2,24 +2,14 @@ import BoardBackground from "components/BoardBackground";
 import BoardHeader from "components/BoardHeader";
 import ScoreBoard from "components/ScoreBoard";
 import React, { FC, useCallback, useState } from "react";
-import { captureFigure, color, ICell } from "types/types";
-import Chess from "utils/chess";
+import { ICell } from "types/types";
+import { getChessEmptyState, IChessState } from "utils/chess";
+const Board = React.lazy(() => import("components/Board"));
 
-const Board = React.lazy(() => import('components/Board'))
-
-interface IChessState {
-	playerColor: color;
-	board: ICell[];
-	isCheck: boolean;
-	isCheckmate: boolean;
-	capturedFiguresMap: {
-		[key in color]: {
-			[key in captureFigure]: number;
-		};
-	};
-}
-
-const chess = new Chess();
+let chess = getChessEmptyState();
+import("utils/chess").then((Chess) => {
+	chess = new Chess.default();
+});
 
 const App: FC = () => {
 	const [state, setState] = useState<IChessState>({
