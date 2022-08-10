@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/react-chess/static/css/main.04929411.css",
-    "main.js": "/react-chess/static/js/main.0cfe57b8.js",
-    "static/js/689.9ec31577.chunk.js": "/react-chess/static/js/689.9ec31577.chunk.js",
+    "main.js": "/react-chess/static/js/main.0b5c5ac0.js",
+    "static/js/689.ac065407.chunk.js": "/react-chess/static/js/689.ac065407.chunk.js",
     "static/js/506.6b20668b.chunk.js": "/react-chess/static/js/506.6b20668b.chunk.js",
     "static/media/rook_black.svg": "/react-chess/static/media/rook_black.fdc575582c2cbe2ec82093702945226f.svg",
     "static/media/knight_black.svg": "/react-chess/static/media/knight_black.7930be9e07b51bc0e069b1d77e31261a.svg",
@@ -18,12 +18,12 @@
     "static/media/pawn_black.svg": "/react-chess/static/media/pawn_black.be5d44ca5ee868885d216188996e3a00.svg",
     "index.html": "/react-chess/index.html",
     "main.04929411.css.map": "/react-chess/static/css/main.04929411.css.map",
-    "main.0cfe57b8.js.map": "/react-chess/static/js/main.0cfe57b8.js.map",
-    "689.9ec31577.chunk.js.map": "/react-chess/static/js/689.9ec31577.chunk.js.map",
+    "main.0b5c5ac0.js.map": "/react-chess/static/js/main.0b5c5ac0.js.map",
+    "689.ac065407.chunk.js.map": "/react-chess/static/js/689.ac065407.chunk.js.map",
     "506.6b20668b.chunk.js.map": "/react-chess/static/js/506.6b20668b.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.04929411.css",
-    "static/js/main.0cfe57b8.js"
+    "static/js/main.0b5c5ac0.js"
   ]
 }
